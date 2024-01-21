@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "445412039919",
+    "project_id": "proyectodam-5d94d",
+    "storage_bucket": "proyectodam-5d94d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445412039919:android:b144a7e36b8e2661910f1a",
+        "android_client_info": {
+          "package_name": "com.dam.proyecto"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARmDjsgeJECuk0dhsXhQntKt7B7D5cBf4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445412039919:android:dad5407046b14e14910f1a",
+        "android_client_info": {
+          "package_name": "com.dam.videojuegos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARmDjsgeJECuk0dhsXhQntKt7B7D5cBf4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
