@@ -52,9 +52,9 @@ fun Principal() {
     var listaJuegosUI = viewModelFirebase.listaJuegos.collectAsState().value
 
     Column {
-        LazyColumn() {
+        LazyColumn(modifier = Modifier.weight(1f)) {
             items(listaJuegosUI) {
-                Text(modifier = Modifier.combinedClickable (
+                Text(modifier = Modifier.combinedClickable(
                     onClick = { viewModelFirebase.borrarJuego(it) },
                     onLongClick = { viewModelFirebase.actualizar(it) }
                 ), text = it.toString())
