@@ -25,7 +25,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(navController: NavHostController, auth: FirebaseAuth) {
+fun RegisterScreen(navController: NavHostController, auth: FirebaseAuth) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -50,31 +50,32 @@ fun LoginScreen(navController: NavHostController, auth: FirebaseAuth) {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { iniciarSesion(navController, auth, email, password) },
-            modifier = Modifier.width(200.dp)
-        ) {
-            Text("Iniciar sesión")
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = { navController.navigate("register") },
+            onClick = { registrarse(navController, auth, email, password) },
             modifier = Modifier.width(200.dp)
         ) {
             Text("Registrarse")
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = { navController.navigate("login") },
+            modifier = Modifier.width(200.dp)
+        ) {
+            Text("Iniciar sesión")
+        }
+
     }
 }
 
-private fun iniciarSesion(
+private fun registrarse(
     navController: NavHostController,
     auth: FirebaseAuth,
     email: String,
     password: String
 ) {
-    auth.signInWithEmailAndPassword(email, password)
+    auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                navController.navigate("main")
+                navController.navigate("login")
             } else {
             }
         }

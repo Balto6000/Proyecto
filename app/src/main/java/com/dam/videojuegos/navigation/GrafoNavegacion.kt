@@ -6,24 +6,27 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.dam.videojuegos.screens.LoginScreen
 import com.dam.videojuegos.screens.MainScreen
+import com.dam.videojuegos.screens.RegisterScreen
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun GrafoNavegacion(navController: NavHostController) {
 
     NavHost(navController = navController, startDestination = "login") {
         composable("login") {
-            LoginScreen { username, password ->
-                if (loginValido(username, password)) {
-                    navController.navigate("main")
-                }
-            }
+            LoginScreen(
+                navController = navController,
+                auth = FirebaseAuth.getInstance()
+            )
+        }
+        composable("register") {
+            RegisterScreen(
+                navController = navController,
+                auth = FirebaseAuth.getInstance()
+            )
         }
         composable("main") {
             MainScreen()
         }
     }
-}
-
-private fun loginValido(username: String, password: String): Boolean {
-    return username.isNotBlank() && password.isNotBlank()
 }
