@@ -12,7 +12,8 @@ data class Juego(
     var idioma: List<String> = mutableListOf(),
     var precio: Double = 0.0,
     var puntuacion: Int = 0,
-    var titulo: String = ""
+    var titulo: String = "",
+    var foto: String = ""
 ) {
     var idJuego: String = ""
 }
