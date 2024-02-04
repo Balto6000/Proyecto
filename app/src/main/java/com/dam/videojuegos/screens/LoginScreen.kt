@@ -1,13 +1,20 @@
 package com.dam.videojuegos.screens
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material3.AlertDialog
@@ -16,6 +23,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,10 +31,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.dam.videojuegos.R
+import com.dam.videojuegos.ui.theme.Azne
+import com.dam.videojuegos.ui.theme.AzulO
+import com.dam.videojuegos.ui.theme.Rosa
+import com.dam.videojuegos.ui.theme.Violeta
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 
@@ -39,15 +57,32 @@ fun LoginScreen(navController: NavHostController, auth: FirebaseAuth) {
     var mensajeError by remember { mutableStateOf("") }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = AzulO)
+            .padding(20.dp),
+        verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.bglogo),
+            contentDescription = "BiblioGames Logo"
+        )
         TextField(
             value = email,
             onValueChange = { email = it },
             label = { Text("Correo") },
-            modifier = Modifier.width(200.dp)
+            modifier = Modifier.width(200.dp),
+            shape = RoundedCornerShape(30.dp),
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Azne,
+                textColor = Color.White,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                focusedLabelColor = Rosa,
+                unfocusedLabelColor = Color.White
+            )
         )
         Spacer(modifier = Modifier.height(16.dp))
         TextField(
@@ -55,24 +90,61 @@ fun LoginScreen(navController: NavHostController, auth: FirebaseAuth) {
             onValueChange = { password = it },
             label = { Text("Contraseña") },
             modifier = Modifier.width(200.dp),
-            visualTransformation = PasswordVisualTransformation()
+            shape = RoundedCornerShape(30.dp),
+            visualTransformation = PasswordVisualTransformation(),
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Azne,
+                textColor = Color.White,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                focusedLabelColor = Rosa,
+                unfocusedLabelColor = Color.White
+            )
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = { iniciarSesion(navController, auth, email, password) {error ->
-                mensajeError = error
-                dialogoError = true
-            }},
-            modifier = Modifier.width(200.dp)
+        Spacer(modifier = Modifier.height(60.dp))
+        Box(modifier = Modifier
+            .width(200.dp)
+            .height(50.dp)
+            .clickable {
+                iniciarSesion(navController, auth, email, password) { error ->
+                    mensajeError = error
+                    dialogoError = true
+                }
+            }
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Violeta,
+                        Rosa
+                    )
+                ),
+                shape = RoundedCornerShape(30.dp)
+            )
         ) {
-            Text("Iniciar sesión")
+            Text(
+                text = "Iniciar sesión",
+                style = TextStyle(
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier.align(Alignment.Center)
+            )
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = { navController.navigate("register") },
-            modifier = Modifier.width(200.dp)
+        Spacer(modifier = Modifier.height(100.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("Registrarse")
+            Text(text = "¿No tienes cuenta?")
+            ClickableText(
+                text = AnnotatedString("Regístrate"),
+                onClick = { navController.navigate("register") },
+                style = TextStyle(
+                    color = Color.Blue,
+                    fontWeight = FontWeight.Bold
+                )
+            )
         }
     }
 
@@ -115,24 +187,27 @@ private fun iniciarSesion(
         email.isEmpty() || password.isEmpty() -> {
             onError("Debe rellenar todos los campos.")
         }
+
         !validarEmail(email) -> {
             onError("El formato del correo electrónico no es válido.")
-        }else -> {
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    navController.navigate("main")
-                } else {
-                    val exception = task.exception
-                    if(exception is FirebaseAuthInvalidCredentialsException){
-                        onError("Credenciales incorrectas.")
-                    }else {
-                        val errorMessage = exception?.message ?: "Error"
-                        onError(errorMessage)
-                    }
+        }
 
+        else -> {
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        navController.navigate("main")
+                    } else {
+                        val exception = task.exception
+                        if (exception is FirebaseAuthInvalidCredentialsException) {
+                            onError("Credenciales incorrectas.")
+                        } else {
+                            val errorMessage = exception?.message ?: "Error"
+                            onError(errorMessage)
+                        }
+
+                    }
                 }
-            }
         }
     }
 
