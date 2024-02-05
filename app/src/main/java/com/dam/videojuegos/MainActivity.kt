@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
 import com.dam.videojuegos.navigation.GrafoNavegacion
+import com.dam.videojuegos.shared.ViewModelFirebase
 import com.dam.videojuegos.ui.theme.MyApplicationTheme
 
 class MainActivity : ComponentActivity() {
@@ -14,7 +15,7 @@ class MainActivity : ComponentActivity() {
             MyApplicationTheme {
                 // A surface container using the 'background' color from the theme
                 val navController = rememberNavController()
-                GrafoNavegacion(navController)
+                GrafoNavegacion(navController, viewModelFirebase = ViewModelFirebase())
             }
         }
     }

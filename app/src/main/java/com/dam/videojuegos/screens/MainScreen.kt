@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.dam.videojuegos.modelo.Juego
 import com.dam.videojuegos.shared.ViewModelFirebase
 import com.dam.videojuegos.ui.theme.Azne
@@ -49,7 +50,7 @@ import com.dam.videojuegos.ui.theme.Rosa
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(navController: NavHostController) {
 
     val viewModelFirebase: ViewModelFirebase = viewModel()
 
@@ -61,9 +62,11 @@ fun MainScreen() {
     val listaJuegosUI = viewModelFirebase.listaJuegos.collectAsState().value
     var searchText by remember { mutableStateOf("") }
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(color = AzulO))  {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = AzulO)
+    ) {
         OutlinedTextField(
             value = searchText,
             onValueChange = { searchText = it },
@@ -82,33 +85,44 @@ fun MainScreen() {
             )
         )
         LazyColumn(modifier = Modifier.weight(1f)) {
-            items(listaJuegosUI) {juego ->
-                JuegoItem(juego, viewModelFirebase)
+            items(listaJuegosUI) { juego ->
+                JuegoItem(juego, viewModelFirebase, navController)
             }
         }
         Row {
-            IconButton(onClick = { viewModelFirebase.añadirJuego() },
-                modifier = Modifier.weight(1f)
+            IconButton(
+                onClick = { viewModelFirebase.añadirJuego() },
+                modifier = Modifier
+                    .weight(1f)
                     .padding(8.dp)
-                    .background(color = Azne,
+                    .background(
+                        color = Azne,
                         shape = RoundedCornerShape(12.dp)
-                    )) {
+                    )
+            ) {
                 Text(text = "Añadir", color = Color.White)
             }
-            IconButton(onClick = {  },
-                modifier = Modifier.weight(1f)
+            IconButton(
+                onClick = { },
+                modifier = Modifier
+                    .weight(1f)
                     .padding(8.dp)
-                    .background(color = Azne,
+                    .background(
+                        color = Azne,
                         shape = RoundedCornerShape(12.dp)
-                    )) {
+                    )
+            ) {
                 Text(text = "Borrar", color = Color.White)
             }
-            IconButton(modifier = Modifier.weight(1f)
-                .padding(8.dp)
-                .background(color = Azne,
-                    shape = RoundedCornerShape(12.dp)
-                ),
-                onClick = {  },
+            IconButton(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(8.dp)
+                    .background(
+                        color = Azne,
+                        shape = RoundedCornerShape(12.dp)
+                    ),
+                onClick = { },
             ) {
                 Text(text = "Modificar", color = Color.White)
             }
@@ -116,15 +130,16 @@ fun MainScreen() {
     }
 
 }
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun JuegoItem(juego: Juego, viewModel: ViewModelFirebase) {
+fun JuegoItem(juego: Juego, viewModel: ViewModelFirebase, navController: NavHostController) {
     val imagePainter = rememberImagePainter(data = juego.foto)
 
     Row(
         modifier = Modifier
             .combinedClickable(
-                onClick = { viewModel.borrarJuego(juego) },
+                onClick = { navController.navigate("detalleJuego/${juego.idJuego}")},
                 onLongClick = { viewModel.actualizar(juego) }
             )
             .padding(16.dp)
@@ -143,30 +158,54 @@ fun JuegoItem(juego: Juego, viewModel: ViewModelFirebase) {
                 .padding(16.dp)
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Column {
+        Column(modifier = Modifier.padding(10.dp)) {
             Spacer(modifier = Modifier.height(4.dp))
             Row {
                 Icon(imageVector = Icons.Default.Gamepad, contentDescription = "", tint = Rosa)
                 Spacer(modifier = Modifier.width(18.dp))
-                Text(text = "JUEGO: ", style = MaterialTheme.typography.bodyMedium, color = Color.White)
+                Text(
+                    text = "JUEGO: ",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White
+                )
                 Spacer(modifier = Modifier.width(4.dp))
-                Text(text = juego.titulo, style = MaterialTheme.typography.bodyMedium, color = Color.White)
+                Text(
+                    text = juego.titulo,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White
+                )
             }
             Spacer(modifier = Modifier.height(4.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(imageVector = Icons.Default.Money, contentDescription = "", tint = Rosa)
                 Spacer(modifier = Modifier.width(18.dp))
-                Text(text = "PRECIO: ", style = MaterialTheme.typography.bodyMedium, color = Color.White)
+                Text(
+                    text = "PRECIO: ",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White
+                )
                 Spacer(modifier = Modifier.width(4.dp))
-                Text(text = juego.precio.toString(), style = MaterialTheme.typography.bodyMedium, color = Color.White)
+                Text(
+                    text = juego.precio.toString(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White
+                )
             }
             Spacer(modifier = Modifier.height(4.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(imageVector = Icons.Default.Star, contentDescription = "r", tint = Rosa)
                 Spacer(modifier = Modifier.width(18.dp))
-                Text(text = "CALIFICACION: ", style = MaterialTheme.typography.bodyMedium, color = Color.White)
+                Text(
+                    text = "CALIFICACION: ",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White
+                )
                 Spacer(modifier = Modifier.width(4.dp))
-                Text(text = juego.clasificacion, style = MaterialTheme.typography.bodyMedium, color = Color.White)
+                Text(
+                    text = juego.clasificacion,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White
+                )
             }
         }
     }

@@ -5,11 +5,12 @@ import java.util.Date
 
 data class Juego(
     var clasificacion: String = "",
-    var desarrollador: List<String> = mutableListOf(),
-    var editor: String = "",
+    var desarrollador: Any = mutableListOf<String>(),
+    var descripcion: String = "",
+    var editor: Any = mutableListOf<String>(),
     var fecha: Date = Date(),
-    var genero: List<String> = mutableListOf(),
-    var idioma: List<String> = mutableListOf(),
+    var genero: Any = mutableListOf<String>(),
+    var idioma: Any = mutableListOf<String>(),
     var precio: Double = 0.0,
     var puntuacion: Int = 0,
     var titulo: String = "",

@@ -64,6 +64,29 @@ fun LoginScreen(navController: NavHostController, auth: FirebaseAuth) {
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Box(modifier = Modifier
+            .width(200.dp)
+            .height(50.dp)
+            .clickable { navController.navigate("main") }
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Violeta,
+                        Rosa
+                    )
+                ),
+                shape = RoundedCornerShape(30.dp)
+            )
+        ) {
+            Text(
+                text = "Entrar",
+                style = TextStyle(
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
         Image(
             painter = painterResource(id = R.drawable.bglogo),
             contentDescription = "BiblioGames Logo"
