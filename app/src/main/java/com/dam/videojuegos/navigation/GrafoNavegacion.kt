@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.dam.videojuegos.screens.AddGame
 import com.dam.videojuegos.screens.GameScreen
 import com.dam.videojuegos.screens.LoginScreen
 import com.dam.videojuegos.screens.MainScreen
@@ -43,6 +44,10 @@ fun GrafoNavegacion(navController: NavHostController, viewModelFirebase: ViewMod
             } else {
                 viewModelFirebase.crearListener()
             }
+        }
+
+        composable("add"){
+            AddGame(navController = navController)
         }
 
     }

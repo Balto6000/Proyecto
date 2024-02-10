@@ -75,7 +75,6 @@ fun RegisterScreen(navController: NavHostController, auth: FirebaseAuth) {
             shape = RoundedCornerShape(30.dp),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Azne,
-                textColor = Color.White,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,
@@ -93,7 +92,6 @@ fun RegisterScreen(navController: NavHostController, auth: FirebaseAuth) {
             visualTransformation = PasswordVisualTransformation(),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Azne,
-                textColor = Color.White,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,

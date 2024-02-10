@@ -91,12 +91,12 @@ fun MainScreen(navController: NavHostController) {
         }
         Row {
             IconButton(
-                onClick = { viewModelFirebase.añadirJuego() },
+                onClick = { navController.navigate(route = "add") },
                 modifier = Modifier
                     .weight(1f)
                     .padding(8.dp)
                     .background(
-                        color = Azne,
+                        color = Rosa,
                         shape = RoundedCornerShape(12.dp)
                     )
             ) {
@@ -108,7 +108,7 @@ fun MainScreen(navController: NavHostController) {
                     .weight(1f)
                     .padding(8.dp)
                     .background(
-                        color = Azne,
+                        color = Rosa,
                         shape = RoundedCornerShape(12.dp)
                     )
             ) {
@@ -119,7 +119,7 @@ fun MainScreen(navController: NavHostController) {
                     .weight(1f)
                     .padding(8.dp)
                     .background(
-                        color = Azne,
+                        color = Rosa,
                         shape = RoundedCornerShape(12.dp)
                     ),
                 onClick = { },
