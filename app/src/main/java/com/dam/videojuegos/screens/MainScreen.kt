@@ -21,7 +21,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Gamepad
 import androidx.compose.material.icons.filled.Money
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -48,9 +47,8 @@ import com.dam.videojuegos.ui.theme.Azne
 import com.dam.videojuegos.ui.theme.AzulO
 import com.dam.videojuegos.ui.theme.Rosa
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavHostController) {
+fun MainScreen(navController: NavHostController, idUsuario: String, esAdmin: Boolean) {
 
     val viewModelFirebase: ViewModelFirebase = viewModel()
 
@@ -86,45 +84,47 @@ fun MainScreen(navController: NavHostController) {
         )
         LazyColumn(modifier = Modifier.weight(1f)) {
             items(listaJuegosUI) { juego ->
-                JuegoItem(juego, viewModelFirebase, navController)
+                JuegoItem(juego, viewModelFirebase, navController, esAdmin)
             }
         }
-        Row {
-            IconButton(
-                onClick = { navController.navigate(route = "add") },
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp)
-                    .background(
-                        color = Rosa,
-                        shape = RoundedCornerShape(12.dp)
-                    )
-            ) {
-                Text(text = "Añadir", color = Color.White)
-            }
-            IconButton(
-                onClick = { },
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp)
-                    .background(
-                        color = Rosa,
-                        shape = RoundedCornerShape(12.dp)
-                    )
-            ) {
-                Text(text = "Borrar", color = Color.White)
-            }
-            IconButton(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp)
-                    .background(
-                        color = Rosa,
-                        shape = RoundedCornerShape(12.dp)
-                    ),
-                onClick = { },
-            ) {
-                Text(text = "Modificar", color = Color.White)
+        if (esAdmin) {
+            Row {
+                IconButton(
+                    onClick = { navController.navigate(route = "add") },
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp)
+                        .background(
+                            color = Rosa,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                ) {
+                    Text(text = "Añadir", color = Color.White)
+                }
+                IconButton(
+                    onClick = { },
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp)
+                        .background(
+                            color = Rosa,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                ) {
+                    Text(text = "Borrar", color = Color.White)
+                }
+                IconButton(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp)
+                        .background(
+                            color = Rosa,
+                            shape = RoundedCornerShape(12.dp)
+                        ),
+                    onClick = { },
+                ) {
+                    Text(text = "Modificar", color = Color.White)
+                }
             }
         }
     }
@@ -133,13 +133,13 @@ fun MainScreen(navController: NavHostController) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun JuegoItem(juego: Juego, viewModel: ViewModelFirebase, navController: NavHostController) {
+fun JuegoItem(juego: Juego, viewModel: ViewModelFirebase, navController: NavHostController, esAdmin: Boolean) {
     val imagePainter = rememberImagePainter(data = juego.foto)
 
     Row(
         modifier = Modifier
             .combinedClickable(
-                onClick = { navController.navigate("detalleJuego/${juego.idJuego}")},
+                onClick = { navController.navigate("detalleJuego/${juego.idJuego}?admin=$esAdmin") },
                 onLongClick = { viewModel.actualizar(juego) }
             )
             .padding(16.dp)

@@ -16,7 +16,6 @@ import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,7 +38,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.dam.videojuegos.ui.theme.Azne
 import com.dam.videojuegos.ui.theme.AzulF
 import com.dam.videojuegos.ui.theme.AzulO
 import com.dam.videojuegos.ui.theme.Rosa
@@ -104,7 +102,6 @@ fun AddGame(navController: NavController){
     )
 
     var seleccionIdioma by remember { mutableStateOf(idiomas[0])}
-
 
     Column(
         modifier = Modifier

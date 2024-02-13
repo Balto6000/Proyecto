@@ -46,6 +46,7 @@ import com.dam.videojuegos.ui.theme.AzulO
 import com.dam.videojuegos.ui.theme.Rosa
 import com.dam.videojuegos.ui.theme.Violeta
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -80,7 +81,8 @@ fun RegisterScreen(navController: NavHostController, auth: FirebaseAuth) {
                 disabledIndicatorColor = Color.Transparent,
                 focusedLabelColor = Rosa,
                 unfocusedLabelColor = Color.White
-            )
+            ),
+            textStyle = TextStyle(color = Color.White)
         )
         Spacer(modifier = Modifier.height(16.dp))
         TextField(
@@ -97,7 +99,8 @@ fun RegisterScreen(navController: NavHostController, auth: FirebaseAuth) {
                 disabledIndicatorColor = Color.Transparent,
                 focusedLabelColor = Rosa,
                 unfocusedLabelColor = Color.White
-            )
+            ),
+            textStyle = TextStyle(color = Color.White)
         )
         Spacer(modifier = Modifier.height(60.dp))
         Box(
@@ -198,8 +201,20 @@ private fun registrarse(
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        navController.navigate("login")
-                    } else {
+                        val db = FirebaseFirestore.getInstance()
+                        val usuario = hashMapOf(
+                            "correo" to email,
+                            "administrador" to false
+                        )
+
+                        db.collection("Usuarios").document(auth.currentUser!!.uid)
+                            .set(usuario)
+                            .addOnSuccessListener {
+                                navController.navigate("login")
+                            }
+                            .addOnFailureListener { e ->
+                                onError("Error al guardar la información en Firestore: ${e.message}")
+                            }                    } else {
                         val exception = task.exception
                         val errorMessage = exception?.message ?: "Error"
                         onError(errorMessage)

@@ -30,23 +30,39 @@ fun GrafoNavegacion(navController: NavHostController, viewModelFirebase: ViewMod
                 auth = FirebaseAuth.getInstance()
             )
         }
-        composable("main") {
-            MainScreen(navController = navController)
+        composable("main/{idUsuario}?admin={admin}",
+            arguments = listOf(
+                navArgument("idUsuario") { type = NavType.StringType },
+                navArgument("admin") { type = NavType.BoolType }
+            )
+        ) { backStackEntry ->
+            val idUsuario = backStackEntry.arguments?.getString("userId")
+            val esAdmin = backStackEntry.arguments?.getBoolean("admin") ?: false
+            MainScreen(
+                navController = navController,
+                idUsuario = idUsuario ?: "",
+                esAdmin = esAdmin
+            )
         }
         composable(
-            route = "detalleJuego/{juegoId}",
-            arguments = listOf(navArgument("juegoId") { type = NavType.StringType })
+            route = "detalleJuego/{juegoId}?admin={admin}",
+            arguments = listOf(
+                navArgument("juegoId") { type = NavType.StringType },
+                navArgument("admin") { type = NavType.BoolType }
+            )
         ) { backStackEntry ->
             val juegoId = backStackEntry.arguments?.getString("juegoId")
+            val esAdmin = backStackEntry.arguments?.getBoolean("admin") ?: false
             val juego = viewModelFirebase.obtenerJuegoPorId(juegoId)
             if (juego != null) {
-                GameScreen(juego = juego)
+                GameScreen(juego = juego, esAdmin = esAdmin)
             } else {
                 viewModelFirebase.crearListener()
             }
         }
 
-        composable("add"){
+
+        composable("add") {
             AddGame(navController = navController)
         }
 

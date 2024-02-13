@@ -47,6 +47,7 @@ import com.dam.videojuegos.ui.theme.Rosa
 import com.dam.videojuegos.ui.theme.Violeta
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.firestore.FirebaseFirestore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,28 +65,53 @@ fun LoginScreen(navController: NavHostController, auth: FirebaseAuth) {
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(modifier = Modifier
-            .width(200.dp)
-            .height(50.dp)
-            .clickable { navController.navigate("main") }
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        Violeta,
-                        Rosa
-                    )
-                ),
-                shape = RoundedCornerShape(30.dp)
-            )
-        ) {
-            Text(
-                text = "Entrar",
-                style = TextStyle(
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier.align(Alignment.Center)
-            )
+        Row {
+            Box(modifier = Modifier
+                .width(200.dp)
+                .height(50.dp)
+                .clickable { navController.navigate("main/${auth.currentUser?.uid}?admin=true") }
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Violeta,
+                            Rosa
+                        )
+                    ),
+                    shape = RoundedCornerShape(30.dp)
+                )
+            ) {
+                Text(
+                    text = "Admin",
+                    style = TextStyle(
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+            Box(modifier = Modifier
+                .width(200.dp)
+                .height(50.dp)
+                .clickable { navController.navigate("main/${auth.currentUser?.uid}?admin=false") }
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Violeta,
+                            Rosa
+                        )
+                    ),
+                    shape = RoundedCornerShape(30.dp)
+                )
+            ) {
+                Text(
+                    text = "User",
+                    style = TextStyle(
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
         }
         Image(
             painter = painterResource(id = R.drawable.bglogo),
@@ -104,7 +130,8 @@ fun LoginScreen(navController: NavHostController, auth: FirebaseAuth) {
                 disabledIndicatorColor = Color.Transparent,
                 focusedLabelColor = Rosa,
                 unfocusedLabelColor = Color.White
-            )
+            ),
+            textStyle = TextStyle(color = Color.White)
         )
         Spacer(modifier = Modifier.height(16.dp))
         TextField(
@@ -121,7 +148,8 @@ fun LoginScreen(navController: NavHostController, auth: FirebaseAuth) {
                 disabledIndicatorColor = Color.Transparent,
                 focusedLabelColor = Rosa,
                 unfocusedLabelColor = Color.White
-            )
+            ),
+            textStyle = TextStyle(color = Color.White)
         )
         Spacer(modifier = Modifier.height(60.dp))
         Box(modifier = Modifier
@@ -217,7 +245,26 @@ private fun iniciarSesion(
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        navController.navigate("main")
+                        val db = FirebaseFirestore.getInstance()
+                        val userRef = db.collection("Usuarios").document(auth.currentUser!!.uid)
+
+                        userRef.get()
+                            .addOnSuccessListener { document ->
+                                if (document.exists()) {
+                                    val esAdmin = document.getBoolean("administrador")
+
+                                    if (esAdmin != null) {
+                                        navController.navigate("main/${auth.currentUser?.uid}?admin=$esAdmin")
+                                    } else {
+                                        navController.navigate("main/${auth.currentUser?.uid}?admin=false")
+                                    }
+                                } else {
+                                    onError("Error al obtener la información del usuario.")
+                                }
+                            }
+                            .addOnFailureListener { e ->
+                                onError("Error al obtener la información del usuario: ${e.message}")
+                            }
                     } else {
                         val exception = task.exception
                         if (exception is FirebaseAuthInvalidCredentialsException) {
@@ -231,7 +278,6 @@ private fun iniciarSesion(
                 }
         }
     }
-
 }
 
 private fun validarEmail(email: String): Boolean {
