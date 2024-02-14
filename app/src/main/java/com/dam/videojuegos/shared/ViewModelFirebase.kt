@@ -85,7 +85,7 @@ class ViewModelFirebase : ViewModel() {
             ),
             59.99,
             92,
-            "Forza Horizon 5",
+            "Zelda 12",
             "https://firebasestorage.googleapis.com/v0/b/proyectodam-5d94d.appspot.com/o/forza-horizon-5-logo-B7E05DB263-seeklogo.com.png?alt=media&token=04b6de17-72f3-44d5-bfaa-b30ee428555e"
         )
         conexion.collection("Videojuegos").add(nuevo)
