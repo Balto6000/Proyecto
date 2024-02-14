@@ -1,6 +1,5 @@
 package com.dam.videojuegos.screens
 
-import android.widget.DatePicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -121,7 +120,7 @@ fun AddGame(navController: NavController){
                 modifier = Modifier
                     .clickable{ navController.popBackStack() }
             )
-            Icon(painter = painterResource(id = R.drawable.bglogo),
+            Icon(painter = painterResource(id = R.drawable.bglogos),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(start = 270.dp)

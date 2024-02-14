@@ -65,7 +65,7 @@ fun RegisterScreen(navController: NavHostController, auth: FirebaseAuth) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.bglogo),
+            painter = painterResource(id = R.drawable.bglogos),
             contentDescription = "BiblioGames Logo"
         )
         TextField(

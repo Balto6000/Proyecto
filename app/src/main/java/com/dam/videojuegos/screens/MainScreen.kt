@@ -16,8 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Gamepad
@@ -40,7 +38,7 @@ import androidx.compose.ui.Modifier
 import coil.compose.rememberImagePainter
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -62,7 +60,7 @@ fun MainScreen(navController: NavHostController, idUsuario: String, esAdmin: Boo
     }
 
     val listaJuegosUI = viewModelFirebase.listaJuegos.collectAsState().value
-    var searchText by remember { mutableStateOf("") }
+    var searchText by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = Modifier
@@ -71,36 +69,39 @@ fun MainScreen(navController: NavHostController, idUsuario: String, esAdmin: Boo
     ) {
         Row (verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(top = 16.dp, start = 16.dp))   {
+                .padding(top = 10.dp, start = 16.dp))
+        {
             Icon(
                 imageVector = Icons.Default.ArrowBackIosNew,
                 contentDescription = null,
                 modifier = Modifier
                     .clickable{ navController.popBackStack() }
             )
-            Icon(painter = painterResource(id = R.drawable.bglogo),
+            Icon(painter = painterResource(id = R.drawable.bglogos),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(start = 270.dp)
                     .size(70.dp)
-                    )
+            )
         }
         OutlinedTextField(
-            value = searchText,
-            onValueChange = { searchText = it },
+            value = searchText ?: "",
+            onValueChange = { searchText = if (it.isEmpty()) null else it},
             label = { Text("Buscar", color = Color.White) },
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-
+                .padding(bottom = 16.dp, start = 16.dp, end = 16.dp),
+            textStyle = TextStyle(color = Color.White)
         )
 
+        val juegosFiltrados = viewModelFirebase.filtrarJuego(listaJuegosUI, searchText)
         LazyColumn(modifier = Modifier.weight(1f)) {
-            items(listaJuegosUI) { juego ->
+            items(juegosFiltrados) { juego ->
                 JuegoItem(juego, viewModelFirebase, navController, esAdmin)
             }
         }
+
         if (esAdmin) {
             Row {
                 IconButton(
@@ -126,18 +127,6 @@ fun MainScreen(navController: NavHostController, idUsuario: String, esAdmin: Boo
                         )
                 ) {
                     Text(text = "Borrar", color = Color.White)
-                }
-                IconButton(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(8.dp)
-                        .background(
-                            color = Rosa,
-                            shape = RoundedCornerShape(12.dp)
-                        ),
-                    onClick = { },
-                ) {
-                    Text(text = "Modificar", color = Color.White)
                 }
             }
         }

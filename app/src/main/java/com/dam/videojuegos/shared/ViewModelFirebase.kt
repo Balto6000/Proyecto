@@ -105,4 +105,9 @@ class ViewModelFirebase : ViewModel() {
         return listaJuegos.value.find { it.idJuego == juegoId }
     }
 
+    fun filtrarJuego(games: List<Juego>, searchText: String?): List<Juego> {
+        return games.filter { game ->
+            game.titulo.contains(searchText ?: "", ignoreCase = true)
+        }
+    }
 }

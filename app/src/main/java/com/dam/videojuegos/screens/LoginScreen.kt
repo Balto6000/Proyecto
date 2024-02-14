@@ -1,6 +1,5 @@
 package com.dam.videojuegos.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -113,8 +112,8 @@ fun LoginScreen(navController: NavHostController, auth: FirebaseAuth) {
                 )
             }
         }
-        Image(
-            painter = painterResource(id = R.drawable.bglogo),
+        Icon(
+            painter = painterResource(id = R.drawable.bglogos),
             contentDescription = "BiblioGames Logo"
         )
         TextField(
