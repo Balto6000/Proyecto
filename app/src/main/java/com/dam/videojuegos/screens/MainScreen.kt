@@ -2,6 +2,7 @@ package com.dam.videojuegos.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Gamepad
 import androidx.compose.material.icons.filled.Money
 import androidx.compose.material.icons.filled.Star
@@ -37,10 +39,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import coil.compose.rememberImagePainter
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.dam.videojuegos.R
 import com.dam.videojuegos.modelo.Juego
 import com.dam.videojuegos.shared.ViewModelFirebase
 import com.dam.videojuegos.ui.theme.Azne
@@ -65,6 +69,22 @@ fun MainScreen(navController: NavHostController, idUsuario: String, esAdmin: Boo
             .fillMaxSize()
             .background(color = AzulO)
     ) {
+        Row (verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(top = 16.dp, start = 16.dp))   {
+            Icon(
+                imageVector = Icons.Default.ArrowBackIosNew,
+                contentDescription = null,
+                modifier = Modifier
+                    .clickable{ navController.popBackStack() }
+            )
+            Icon(painter = painterResource(id = R.drawable.bglogo),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(start = 270.dp)
+                    .size(70.dp)
+                    )
+        }
         OutlinedTextField(
             value = searchText,
             onValueChange = { searchText = it },
@@ -72,16 +92,10 @@ fun MainScreen(navController: NavHostController, idUsuario: String, esAdmin: Boo
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = {
+                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
 
-                }
-            )
         )
+
         LazyColumn(modifier = Modifier.weight(1f)) {
             items(listaJuegosUI) { juego ->
                 JuegoItem(juego, viewModelFirebase, navController, esAdmin)

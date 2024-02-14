@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DropdownMenuItem
@@ -34,10 +35,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.dam.videojuegos.R
 import com.dam.videojuegos.ui.theme.AzulF
 import com.dam.videojuegos.ui.theme.AzulO
 import com.dam.videojuegos.ui.theme.Rosa
@@ -108,6 +111,23 @@ fun AddGame(navController: NavController){
             .fillMaxSize()
             .background(color = AzulO)
     ) {
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(top = 16.dp, start = 16.dp))   {
+            Icon(
+                imageVector = Icons.Default.ArrowBackIosNew,
+                contentDescription = null,
+                modifier = Modifier
+                    .clickable{ navController.popBackStack() }
+            )
+            Icon(painter = painterResource(id = R.drawable.bglogo),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(start = 270.dp)
+                    .size(70.dp)
+            )
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -429,7 +449,7 @@ fun AddGame(navController: NavController){
             item{
                 Row {
                     IconButton(
-                        onClick = { navController.navigate(route = "main") },
+                        onClick = { navController.popBackStack() },
                         modifier = Modifier
                             .weight(1f)
                             .padding(8.dp)

@@ -55,7 +55,7 @@ fun GrafoNavegacion(navController: NavHostController, viewModelFirebase: ViewMod
             val esAdmin = backStackEntry.arguments?.getBoolean("admin") ?: false
             val juego = viewModelFirebase.obtenerJuegoPorId(juegoId)
             if (juego != null) {
-                GameScreen(juego = juego, esAdmin = esAdmin)
+                GameScreen(juego = juego, esAdmin = esAdmin, navController = navController)
             } else {
                 viewModelFirebase.crearListener()
             }
