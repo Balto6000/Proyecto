@@ -23,7 +23,6 @@ import androidx.compose.material.icons.filled.Gamepad
 import androidx.compose.material.icons.filled.Money
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -36,7 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import coil.compose.rememberImagePainter
 import androidx.compose.ui.graphics.Color
@@ -135,30 +133,6 @@ fun MainScreen(navController: NavHostController, idUsuario: String, esAdmin: Boo
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
-                Box(modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp)
-                    .height(50.dp)
-                    .clickable {}
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                Violeta,
-                                Rosa
-                            )
-                        ),
-                        shape = RoundedCornerShape(30.dp)
-                    )
-                ) {
-                    Text(
-                        text = "Borrar",
-                        style = TextStyle(
-                            color = Color.Black,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
             }
         }
     }
@@ -173,7 +147,7 @@ fun JuegoItem(juego: Juego, viewModel: ViewModelFirebase, navController: NavHost
         modifier = Modifier
             .combinedClickable(
                 onClick = { navController.navigate("detalleJuego/${juego.idJuego}?admin=$esAdmin") },
-                onLongClick = { viewModel.actualizar(juego) }
+                onLongClick = { viewModel.borrarJuego(juego) }
             )
             .padding(16.dp)
             .background(

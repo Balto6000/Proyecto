@@ -2,7 +2,9 @@ package com.dam.videojuegos.shared
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dam.videojuegos.modelo.Juego
+import com.dam.videojuegos.screens.AddGame
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -57,35 +59,20 @@ class ViewModelFirebase : ViewModel() {
         ListenerReg.remove()
     }
 
-    fun añadirJuego() {
+    fun añadirJuego(titulo: String, clasificacion: String, desarrollador: String, editor: String, precio: Double, puntuacion: Int, descripcion: String, genero: String, idioma: String) {
         var nuevo = Juego(
-            "PEGI 3",
-            listOf("Playground Games"),
-            "Explora los vibrantes paisajes del mundo abierto de México y disfruta de una diversión sin límites al volante de los mejores coches del mundo. Conquista la escarpada Sierra Nueva en la experiencia definitiva del rally de Horizon.",
-            listOf("Xbox Game Studios"),
+            clasificacion,
+            listOf(desarrollador),
+            descripcion,
+            listOf(editor),
             Date(2021 - 1900, 11, 9),
-            listOf("Acción", "Aventura", "Carreras", "Simuladores", "Deportes"),
+            listOf(genero),
             listOf(
-                "Español de España",
-                "Inglés",
-                "Francés",
-                "Italiano",
-                "Alemán",
-                "Checo",
-                "Húngaro",
-                "Japonés",
-                "Coreano",
-                "Polaco",
-                "Portugués de Brasil",
-                "Ruso",
-                "Chino simplificado",
-                "Español de Hispanoamérica",
-                "Chino tradicional",
-                "Turco"
+                idioma
             ),
-            59.99,
-            92,
-            "Zelda 12",
+            precio,
+            puntuacion,
+            titulo,
             "https://firebasestorage.googleapis.com/v0/b/proyectodam-5d94d.appspot.com/o/forza-horizon-5-logo-B7E05DB263-seeklogo.com.png?alt=media&token=04b6de17-72f3-44d5-bfaa-b30ee428555e"
         )
         conexion.collection("Videojuegos").add(nuevo)

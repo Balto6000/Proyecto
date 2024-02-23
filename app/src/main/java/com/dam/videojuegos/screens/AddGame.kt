@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,8 +21,6 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -40,11 +37,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.dam.videojuegos.R
+import com.dam.videojuegos.shared.ViewModelFirebase
 import com.dam.videojuegos.ui.theme.AzulF
 import com.dam.videojuegos.ui.theme.AzulO
 import com.dam.videojuegos.ui.theme.Rosa
@@ -54,16 +52,18 @@ import androidx.compose.material3.DropdownMenu as DropdownMenu
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddGame(navController: NavController) {
-    var textoJuego by remember { mutableStateOf(TextFieldValue()) }
-    var textoDescription by remember { mutableStateOf(TextFieldValue()) }
-    var textoDesarrollador by remember { mutableStateOf(TextFieldValue()) }
-    var textoEditor by remember { mutableStateOf(TextFieldValue()) }
-    var textoPrecio by remember { mutableStateOf(TextFieldValue()) }
-    var textoPuntuacion by remember { mutableStateOf(TextFieldValue()) }
-    var textoClasificacion by remember { mutableStateOf(TextFieldValue()) }
+    var textoJuego by remember { mutableStateOf("") }
+    var textoDescription by remember { mutableStateOf("") }
+    var textoDesarrollador by remember { mutableStateOf("") }
+    var textoEditor by remember { mutableStateOf("") }
+    var textoPrecio by remember { mutableStateOf("") }
+    var textoPuntuacion by remember { mutableStateOf("") }
+    var textoClasificacion by remember { mutableStateOf("") }
     var expandedGenero by remember { mutableStateOf(false) }
     var expandedIdioma by remember { mutableStateOf(false) }
     var state = rememberDatePickerState()
+
+    val viewModelFirebase: ViewModelFirebase = viewModel()
 
     val generos = listOf(
         "Acción",
@@ -153,7 +153,8 @@ fun AddGame(navController: NavController) {
         }
 
         LazyColumn(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
                 .padding(16.dp)
         ) {
 
@@ -451,12 +452,24 @@ fun AddGame(navController: NavController) {
                 DatePicker(state = state)
             }
         }
+
         Row {
             Box(modifier = Modifier
                 .weight(1f)
                 .height(70.dp)
                 .padding(8.dp)
                 .clickable {
+                    viewModelFirebase.añadirJuego(
+                        textoJuego,
+                        textoClasificacion,
+                        textoDesarrollador,
+                        textoEditor,
+                        textoPrecio.toDoubleOrNull() ?: 0.0,
+                        textoPuntuacion.toIntOrNull() ?: 0,
+                        textoDescription,
+                        seleccionGenero,
+                        seleccionIdioma
+                    )
                     navController.popBackStack()
                 }
                 .background(
@@ -482,10 +495,3 @@ fun AddGame(navController: NavController) {
         }
     }
 }
-
-
-
-
-
-
-
